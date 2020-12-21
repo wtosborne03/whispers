@@ -1,0 +1,84 @@
+<head>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://unpkg.com/geofirestore/dist/geofirestore.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <style>
+	body, html {
+	  height: 100%;
+	  width: 100%;
+	}
+	#map-canvas {
+		height: 100%;
+		width: 100%;
+		background-color: #CCC;
+	}
+  </style>
+</head>
+<body>
+<div id="map-canvas"></div>
+
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  
+  <script>
+  	function main() {
+  // TODO: Replace the following with your app's Firebase project configuration
+  // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+  var firebaseConfig = {
+    apiKey: "AIzaSyDhiTv-AiBuOey2y4Z3UgMINXNA_kPQKS0",
+    authDomain: "peoplebase-99d15.firebaseapp.com",
+    databaseURL: "https://peoplebase-99d15.firebaseio.com",
+    projectId: "peoplebase-99d15",
+    storageBucket: "peoplebase-99d15.appspot.com",
+    messagingSenderId: "761268600339",
+    appId: "1:761268600339:web:2e8a5b46174b487a1c89e6",
+    measurementId: "G-1S98273L40"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+  let mess = db.collection('messages');
+  let coords;
+
+
+
+  var myLatLng = new google.maps.LatLng(-8, 95.7),
+    myOptions = {
+      zoom: 1,
+      center: myLatLng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      gestureHandling: "none",
+      zoomControl: false,
+    };
+  let map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
+
+
+
+
+
+
+
+  navigator.geolocation.watchPosition(function(pos) {
+    map.panTo(google.maps.LatLng(pos.coords.longitude, pos.coords.latitude));
+    coords = pos.coords;
+  });
+
+  function refresh() {
+    const query = mess.near({
+      center: new firebase.firestore.GeoPoint(coords),
+      radius: 1000
+    });
+    query.get().then((value) => {
+      // All GeoDocument returned by GeoQuery, like the GeoDocument added above
+      console.log(value.docs);
+    });
+  }
+  setInterval(refresh(), 1000);
+}
+main();
+  </script>
+</body>
