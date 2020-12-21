@@ -30,7 +30,9 @@ zoom: 17
 
   navigator.geolocation.getCurrentPosition(function(pos) {
     coords = pos.coords;
+	setup();
   });
+ function setup() {
   var youmarker = new mapboxgl.Marker()
 	.setLngLat([30.5, 50.5])
 	.addTo(map);
@@ -54,4 +56,4 @@ zoom: 17
     });
   }
   setInterval(refresh(), 1000);
-
+ }
