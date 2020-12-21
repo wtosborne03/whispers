@@ -27,7 +27,9 @@ style: 'mapbox://styles/mapbox/streets-v11'
 
 
 
-
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    coords = pos.coords;
+  });
 
 
   navigator.geolocation.watchPosition(function(pos) {
