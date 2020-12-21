@@ -23,7 +23,7 @@
 var map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11',
-zoom: 15
+zoom: 22
 });
 
 
@@ -31,12 +31,16 @@ zoom: 15
   navigator.geolocation.getCurrentPosition(function(pos) {
     coords = pos.coords;
   });
+  var youmarker = new mapboxgl.Marker()
+	.setLngLat([30.5, 50.5])
+	.addTo(map);
 
 
   navigator.geolocation.watchPosition(function(pos) {
   console.log(pos);
     map.easeTo({center: [pos.coords.longitude, pos.coords.latitude]});
     coords = pos.coords;
+	youmarker.setLngLat([coords.longitude, coord.latitude]);
   });
 
   function refresh() {
