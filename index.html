@@ -2,6 +2,11 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
   <script src="https://unpkg.com/geofirestore/dist/geofirestore.js"></script>
+  
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+
     <script>
   	function initMap() {
   // TODO: Replace the following with your app's Firebase project configuration
@@ -25,17 +30,11 @@
 
 
 
-  var myLatLng = new google.maps.LatLng(-8, 95.7),
-    myOptions = {
-      zoom: 1,
-      center: myLatLng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true,
-      gestureHandling: "none",
-      zoomControl: false,
-    };
-  let map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
-
+  mapboxgl.accessToken = 'pk.eyJ1Ijoid3Rvc2Jvcm5lMDMiLCJhIjoiY2tna3F6ODF2MDdsMTJzbG4yNWs3dWJxaiJ9.902DiSI6jaX-O_f_seKSiQ';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11'
+});
 
 
 
@@ -44,7 +43,7 @@
 
   navigator.geolocation.watchPosition(function(pos) {
   console.log(pos);
-    map.panTo(google.maps.LatLng(pos.coords.longitude, pos.coords.latitude));
+    map.easeTo({center: [pos.coords.longitude, pos.coords.latitude]});
     coords = pos.coords;
   });
 
@@ -60,15 +59,14 @@
   }
   setInterval(refresh(), 1000);
 }
+initMap();
   </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMBNGNP0dQ2kPONSdPzc47JwCzk50K9zA&callback=initMap"
-  type="text/javascript"></script>
   <style>
 	body, html {
 	  height: 100%;
 	  width: 100%;
 	}
-	#map-canvas {
+	#map {
 		height: 100%;
 		width: 100%;
 		background-color: #CCC;
@@ -76,7 +74,7 @@
   </style>
 </head>
 <body>
-<div id="map-canvas"></div>
+<div id="map" class="map"></div>
   
 
 </body>
