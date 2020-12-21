@@ -43,6 +43,7 @@
 
 
   navigator.geolocation.watchPosition(function(pos) {
+  console.log(pos);
     map.panTo(google.maps.LatLng(pos.coords.longitude, pos.coords.latitude));
     coords = pos.coords;
   });
