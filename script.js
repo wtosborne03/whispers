@@ -4,9 +4,9 @@
   
   
 const getGeohashRange = (
-  latitude: number,
-  longitude: number,
-  distance: number, // miles
+  latitude
+  longitude,
+  distance, // miles
 ) => {
   const lat = 0.0144927536231884; // degrees latitude per mile
   const lon = 0.0181818181818182; // degrees longitude per mile
