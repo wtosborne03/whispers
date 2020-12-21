@@ -46,7 +46,7 @@ zoom: 22
   function refresh() {
     const query = mess.near({
       center: new firebase.firestore.GeoPoint(coords.longitude, coords.latitude),
-      radius: 1000
+      radius: 10000000000
     });
     query.get().then((value) => {
       // All GeoDocument returned by GeoQuery, like the GeoDocument added above
