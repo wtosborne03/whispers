@@ -3,29 +3,6 @@
   
   
   
-const getGeohashRange = (
-  latitude,
-  longitude,
-  distance // miles
-) => {
-  const lat = 0.0144927536231884; // degrees latitude per mile
-  const lon = 0.0181818181818182; // degrees longitude per mile
-
-  const lowerLat = latitude - lat * distance;
-  const lowerLon = longitude - lon * distance;
-
-  const upperLat = latitude + lat * distance;
-  const upperLon = longitude + lon * distance;
-
-  const lower = geohash.encode(lowerLat, lowerLon);
-  const upper = geohash.encode(greaterLat, greaterLon);
-
-  return {
-    lower,
-    upper
-  };
-};
-
 
   var firebaseConfig = {
     apiKey: "AIzaSyDhiTv-AiBuOey2y4Z3UgMINXNA_kPQKS0",
@@ -41,7 +18,8 @@ const getGeohashRange = (
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   var db = firebase.firestore();
-  let mess = db.collection('messages');
+  const GeoFirestore = geofirestore.initializeApp(db);
+  let mess = GeoFirestore.collection('messages');
   let coords;
 
 
@@ -73,13 +51,14 @@ zoom: 17
   });
 
   function refresh() {
-	  const range = getGeohashRange(coords.latitude, coords.longitude, 1000000);
-    mess.where("geohash", ">=", range.lower)
-    .where("geohash", "<=", range.upper)
-    .onSnapshot(snapshot => {
-      // Your own custom logic here
-      console.log(snapshot.docs)
-    })
+    const query = mess.geofirestore.near({
+      center: new firebase.firestore.GeoPoint(coords.longitude, coords.latitude),
+      radius: 10000000000
+    });
+    query.get().then((value) => {
+      // All GeoDocument returned by GeoQuery, like the GeoDocument added above
+      console.log(value.docs);
+    });
   }
   setInterval(refresh(), 1000);
  }
