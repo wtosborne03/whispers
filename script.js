@@ -42,7 +42,7 @@ zoom: 17
   console.log(pos);
     map.easeTo({center: [pos.coords.longitude, pos.coords.latitude]});
     coords = pos.coords;
-	youmarker.setLngLat([coords.longitude, coord.latitude]);
+	youmarker.setLngLat([coords.longitude, coords.latitude]);
   });
 
   function refresh() {
